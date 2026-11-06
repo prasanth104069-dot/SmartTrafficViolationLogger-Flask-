@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% block title %}Violation History{% endblock %}
+{% block content %}
+
+<div class="card mb-4">
+  <div class="card-header card-header-signal"><i class="fa-solid fa-filter me-1"></i> Search & Filter</div>
+  <div class="card-body">
+    <form method="GET" class="row g-3">
+      <div class="col-md-3">
+        <label class="form-label">Vehicle Number</label>
+        <input type="text" name="vehicle" class="form-control" value="{{ filters.get('vehicle','') }}" placeholder="e.g. KA01">
+      </div>
+      <div class="col-md-2">
+        <label class="form-label">Status</label>
+        <select name="status" class="form-select">
+          <option value="">All</option>
+          <option value="Unpaid" {% if filters.get('status')=='Unpaid' %}selected{% endif %}>Unpaid</option>
+          <option value="Paid" {% if filters.get('status')=='Paid' %}selected{% endif %}>Paid</option>
+        </select>
+      </div>
+      <div class="col-md-3">
+        <label class="form-label">Violation Type</label>
+        <select name="type" class="form-select">
+          <option value="">All</option>
+          {% for t in violation_types %}
+          <option value="{{ t }}" {% if filters.get('type')==t %}selected{% endif %}>{{ t }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="col-md-2">
+        <label class="form-label">From</label>
+        <input type="date" name="date_from" class="form-control" value="{{ filters.get('date_from','') }}">
+      </div>
+      <div class="col-md-2">
+        <label class="form-label">To</label>
+        <input type="date" name="date_to" class="form-control" value="{{ filters.get('date_to','') }}">
+      </div>
+      <div class="col-12 d-flex gap-2">
+        <button type="submit" class="btn btn-signal-green"><i class="fa-solid fa-magnifying-glass me-1"></i> Search</button>
+        <a href="{{ url_for('history') }}" class="btn btn-outline-secondary">Reset</a>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-header card-header-signal"><i class="fa-solid fa-table-list me-1"></i> Violations ({{ violations|length }})</div>
+  <div class="card-body">
+    <div class="table-responsive">
+      <table class="table align-middle">
+        <thead>
+          <tr>
+            <th>Vehicle No.</th><th>Type</th><th>Location</th><th>Date</th>
+            <th>Fine</th><th>Status</th><th>QR</th><th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for v in violations %}
+          <tr>
+            <td class="fw-bold">{{ v.vehicle_number }}</td>
+            <td>{{ v.violation_type }}</td>
+            <td>{{ v.location }}</td>
+            <td>{{ v.violation_date }}</td>
+            <td>₹{{ "%.2f"|format(v.fine_amount) }}</td>
+            <td><span class="badge {{ 'badge-paid' if v.status == 'Paid' else 'badge-unpaid' }}">{{ v.status }}</span></td>
+            <td><a href="{{ url_for('challan', violation_id=v.id) }}" title="View challan"><i class="fa-solid fa-qrcode"></i></a></td>
+            <td>
+              <form method="POST" action="{{ url_for('update_status', violation_id=v.id) }}" class="d-inline">
+                <button type="submit" class="btn btn-sm {{ 'btn-signal-yellow' if v.status=='Paid' else 'btn-signal-green' }}">
+                  Mark {{ 'Unpaid' if v.status=='Paid' else 'Paid' }}
+                </button>
+              </form>
+            </td>
+          </tr>
+          {% else %}
+          <tr><td colspan="8" class="text-center text-muted">No matching violations found.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

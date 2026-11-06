@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}Challan #{{ v.id }}{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-7">
+    <div class="challan-box">
+      <div class="d-flex justify-content-between align-items-start mb-3">
+        <div>
+          <h4 class="mb-0"><i class="fa-solid fa-receipt me-1"></i> Traffic Challan</h4>
+          <small class="text-muted">Challan ID: {{ v.challan_id }}</small>
+        </div>
+        <span class="badge {{ 'badge-paid' if v.status == 'Paid' else 'badge-unpaid' }} fs-6">{{ v.status }}</span>
+      </div>
+      <hr>
+      <table class="table table-borderless mb-3">
+        <tr><th>Vehicle Number</th><td>{{ v.vehicle_number }}</td></tr>
+        <tr><th>Violation Type</th><td>{{ v.violation_type }}</td></tr>
+        <tr><th>Location</th><td>{{ v.location }}</td></tr>
+        <tr><th>Date</th><td>{{ v.violation_date }}</td></tr>
+        <tr><th>Fine Amount</th><td>₹{{ "%.2f"|format(v.fine_amount) }}</td></tr>
+      </table>
+
+      <div class="text-center">
+        {% if v.qr_path %}
+        <img src="{{ url_for('static', filename=v.qr_path) }}" alt="QR Code" width="180" height="180">
+        <p class="text-muted small mt-2">Scan this QR code to check live status of this challan.</p>
+        <p class="small"><a href="{{ v.public_url }}" target="_blank">{{ v.public_url }}</a></p>
+        {% endif %}
+      </div>
+
+      <div class="d-flex gap-2 justify-content-center mt-3">
+        <a href="{{ url_for('history') }}" class="btn btn-signal-green"><i class="fa-solid fa-list me-1"></i> Back to History</a>
+        <a href="{{ url_for('add_violation') }}" class="btn btn-signal-yellow"><i class="fa-solid fa-plus me-1"></i> Add Another</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

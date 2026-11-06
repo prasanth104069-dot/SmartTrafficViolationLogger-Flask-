@@ -1,0 +1,130 @@
+:root {
+  --asphalt: #1c1f26;
+  --asphalt-2: #262a33;
+  --signal-red: #e63946;
+  --signal-yellow: #f4a300;
+  --signal-green: #2a9d55;
+  --lane-yellow: #ffd23f;
+}
+
+body {
+  background-color: #f4f5f7;
+  background-image:
+    linear-gradient(#e9eaee 1px, transparent 1px),
+    linear-gradient(90deg, #e9eaee 1px, transparent 1px);
+  background-size: 24px 24px;
+  font-family: "Segoe UI", Roboto, Arial, sans-serif;
+  color: #222;
+}
+
+/* dashed road stripe used top/bottom */
+.road-stripe {
+  height: 6px;
+  background: repeating-linear-gradient(
+    90deg,
+    var(--lane-yellow) 0 24px,
+    transparent 24px 48px
+  );
+  background-color: var(--asphalt);
+}
+
+.navbar {
+  background: linear-gradient(90deg, var(--asphalt) 0%, var(--asphalt-2) 100%);
+  border-bottom: 3px solid var(--lane-yellow);
+}
+
+.navbar-brand {
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.signal-dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-right: 2px;
+}
+.signal-dot.red { background: var(--signal-red); box-shadow: 0 0 6px var(--signal-red); }
+.signal-dot.yellow { background: var(--signal-yellow); box-shadow: 0 0 6px var(--signal-yellow); }
+.signal-dot.green { background: var(--signal-green); box-shadow: 0 0 6px var(--signal-green); margin-right: 10px; }
+
+.btn-officer {
+  background: var(--signal-yellow) !important;
+  color: #1c1f26 !important;
+  border-radius: 20px;
+  padding: 4px 14px !important;
+  font-weight: 600;
+  margin-left: 8px;
+}
+
+.card {
+  border: none;
+  border-radius: 14px;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+}
+
+.card-header-signal {
+  background: var(--asphalt);
+  color: white;
+  border-radius: 14px 14px 0 0;
+  border-bottom: 3px solid var(--lane-yellow);
+}
+
+.stat-card {
+  border-radius: 14px;
+  color: white;
+  padding: 1.25rem;
+  text-align: center;
+}
+.stat-card.total { background: linear-gradient(135deg, #2b3a55, #1c1f26); }
+.stat-card.unpaid { background: linear-gradient(135deg, var(--signal-red), #b32433); }
+.stat-card.paid { background: linear-gradient(135deg, var(--signal-green), #1f7a41); }
+.stat-card h2 { font-size: 2.2rem; font-weight: 700; margin: 0; }
+
+.badge-paid {
+  background: var(--signal-green);
+}
+.badge-unpaid {
+  background: var(--signal-red);
+}
+
+.hero {
+  background: linear-gradient(120deg, var(--asphalt) 60%, var(--asphalt-2) 100%);
+  color: white;
+  border-radius: 18px;
+  padding: 2.5rem;
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 2rem;
+}
+.hero::after {
+  content: "";
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 8px;
+  background: repeating-linear-gradient(90deg, var(--lane-yellow) 0 24px, transparent 24px 48px);
+}
+.hero i.fa-car-side {
+  font-size: 3rem;
+  color: var(--lane-yellow);
+}
+
+.challan-box {
+  border: 2px dashed var(--asphalt);
+  border-radius: 14px;
+  padding: 1.5rem;
+  background: white;
+}
+
+table thead {
+  background: var(--asphalt);
+  color: white;
+}
+
+.btn-signal-green { background: var(--signal-green); border-color: var(--signal-green); color: #fff; }
+.btn-signal-red { background: var(--signal-red); border-color: var(--signal-red); color: #fff; }
+.btn-signal-yellow { background: var(--signal-yellow); border-color: var(--signal-yellow); color: #1c1f26; }

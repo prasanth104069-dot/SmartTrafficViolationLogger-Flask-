@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Challan Status{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-6">
+    <div class="card text-center">
+      <div class="card-header card-header-signal">
+        <i class="fa-solid fa-circle-info me-1"></i> Public Challan Status
+      </div>
+      <div class="card-body p-4">
+        <span class="signal-dot {{ 'green' if v.status=='Paid' else 'red' }}" style="width:16px;height:16px;"></span>
+        <h3 class="mt-2 mb-3">
+          <span class="badge {{ 'badge-paid' if v.status == 'Paid' else 'badge-unpaid' }} fs-5">{{ v.status }}</span>
+        </h3>
+        <table class="table table-borderless text-start">
+          <tr><th>Vehicle Number</th><td>{{ v.vehicle_number }}</td></tr>
+          <tr><th>Violation Type</th><td>{{ v.violation_type }}</td></tr>
+          <tr><th>Location</th><td>{{ v.location }}</td></tr>
+          <tr><th>Date</th><td>{{ v.violation_date }}</td></tr>
+          <tr><th>Fine Amount</th><td>₹{{ "%.2f"|format(v.fine_amount) }}</td></tr>
+        </table>
+        {% if v.status == 'Unpaid' %}
+        <p class="text-muted small">Please pay this fine at your nearest traffic authority office or online payment portal.</p>
+        {% else %}
+        <p class="text-success small"><i class="fa-solid fa-circle-check"></i> This fine has been paid. No further action needed.</p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

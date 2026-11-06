@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block title %}Check Vehicle Status{% endblock %}
+{% block content %}
+
+<div class="card mb-4">
+  <div class="card-header card-header-signal"><i class="fa-solid fa-magnifying-glass me-1"></i> Check Your Vehicle's Fine Status</div>
+  <div class="card-body">
+    <form method="GET" action="{{ url_for('check_vehicle') }}" class="row g-2 align-items-end">
+      <div class="col-sm-8 col-md-6">
+        <label class="form-label">Enter Vehicle Number</label>
+        <input type="text" name="vehicle" class="form-control form-control-lg text-uppercase"
+               value="{{ vehicle }}" placeholder="e.g. KA01AB1234" required autofocus>
+      </div>
+      <div class="col-sm-4 col-md-3">
+        <button type="submit" class="btn btn-signal-red btn-lg w-100"><i class="fa-solid fa-magnifying-glass me-1"></i> Check Status</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+{% if searched %}
+  {% if violations %}
+    <div class="card mb-4">
+      <div class="card-header card-header-signal d-flex justify-content-between align-items-center flex-wrap gap-2">
+        <span><i class="fa-solid fa-car me-1"></i> Results for {{ vehicle }}</span>
+        {% if unpaid_total > 0 %}
+          <span class="badge badge-unpaid fs-6">₹{{ "%.2f"|format(unpaid_total) }} Due</span>
+        {% else %}
+          <span class="badge badge-paid fs-6"><i class="fa-solid fa-circle-check"></i> All Clear</span>
+        {% endif %}
+      </div>
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table align-middle mb-0">
+            <thead>
+              <tr><th>Type</th><th>Location</th><th>Date</th><th>Fine</th><th>Status</th></tr>
+            </thead>
+            <tbody>
+              {% for v in violations %}
+              <tr>
+                <td>{{ v.violation_type }}</td>
+                <td>{{ v.location }}</td>
+                <td>{{ v.violation_date }}</td>
+                <td>₹{{ "%.2f"|format(v.fine_amount) }}</td>
+                <td><span class="badge {{ 'badge-paid' if v.status == 'Paid' else 'badge-unpaid' }}">{{ v.status }}</span></td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  {% else %}
+    <div class="card">
+      <div class="card-body text-center py-5">
+        <i class="fa-solid fa-circle-check fa-2x mb-3" style="color: var(--signal-green);"></i>
+        <h5 class="mb-1">No violations found for {{ vehicle }}</h5>
+        <p class="text-muted mb-0">This vehicle has a clean record, or hasn't been logged yet.</p>
+      </div>
+    </div>
+  {% endif %}
+{% endif %}
+
+{% endblock %}
